@@ -85,6 +85,8 @@ API documentation is automatically generated and available at:
 - Swagger UI: http://localhost:8000/docs
 - ReDoc: http://localhost:8000/redoc
 
+![docs.png](docs.png)
+
 ## Usage
 
 ### Example API Endpoints

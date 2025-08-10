@@ -12,7 +12,7 @@ async def lifespan(app: fastapi.FastAPI):
     await init_db()
     yield
 
-app = fastapi.FastAPI(lifespan=lifespan)
+app = fastapi.FastAPI(lifespan=lifespan, title="Template REST API", version="1.0.0")
 
 app.include_router(book_router)
 
