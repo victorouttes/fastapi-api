@@ -44,7 +44,7 @@ fastapi-api/
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/yourusername/fastapi-api.git
+   git clone https://github.com/victorouttes/fastapi-api.git
    cd fastapi-api
    ```
 
