@@ -1,6 +1,8 @@
+from datetime import datetime
 from http import HTTPStatus
 from math import ceil
 from typing import Type, TypeVar, Generic, Optional, get_args, get_origin
+from zoneinfo import ZoneInfo
 
 from fastapi import HTTPException
 from sqlalchemy import func
@@ -100,8 +102,10 @@ class BaseRepository(Generic[Model, SchemaCreate, SchemaUpdate]):
             if not obj:
                 raise HTTPException(status_code=HTTPStatus.NOT_FOUND, detail="Identifier not found")
             for k, v in data_dict.items():
-                if hasattr(obj, k):
+                if hasattr(obj, k) and getattr(obj, k) != v:
                     setattr(obj, k, v)
+            if hasattr(obj, "updated_at"):
+                setattr(obj, "updated_at", datetime.now(ZoneInfo("UTC")))
             try:
                 await session.commit()
                 await session.refresh(obj)

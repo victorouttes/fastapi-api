@@ -1,8 +1,11 @@
 from datetime import datetime
 
-from sqlalchemy import Column, DateTime
+from sqlalchemy import Column, DateTime, event, inspect
 from sqlmodel import SQLModel, Field
 from zoneinfo import ZoneInfo
+
+from src.security.security_handler import security_handler
+
 
 class User(SQLModel, table=True):
     id: int = Field(primary_key=True)
@@ -34,3 +37,19 @@ class UserPublic(SQLModel):
     email: str
     created_at: datetime
     updated_at: datetime
+
+# Faz o hash automaticamente antes de inserir
+@event.listens_for(User, "before_insert")
+def _hash_password_before_insert(mapper, connection, target: User) -> None:
+    if target.password:
+        target.password = security_handler.get_password_hash(target.password)
+
+# Re-hash somente se a senha foi alterada durante update
+@event.listens_for(User, "before_update")
+def _hash_password_before_update(mapper, connection, target: User) -> None:
+    state = inspect(target)
+    if "password" in state.attrs:
+        history = state.attrs.password.history
+        if history.has_changes() and target.password:
+            target.password = security_handler.get_password_hash(target.password)
+

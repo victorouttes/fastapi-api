@@ -20,7 +20,7 @@ async def create_book(book: BookCreate, controller: BookController = Depends(boo
 async def get_book(id: int, controller: BookController = Depends(book_controller)):
     return await controller.get_by_id(id)
 
-@book_router.put("/{id}", status_code=HTTPStatus.OK, response_model=BookPublic)
+@book_router.patch("/{id}", status_code=HTTPStatus.OK, response_model=BookPublic)
 async def update_book(id: int, book: BookUpdate, controller: BookController = Depends(book_controller)):
     return await controller.update(id, data=book)
 

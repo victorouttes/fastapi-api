@@ -20,7 +20,7 @@ async def create_user(user: UserCreate, controller: UserController = Depends(use
 async def get_user(id: int, controller: UserController = Depends(user_controller)):
     return await controller.get_by_id(id)
 
-@user_router.put("/{id}", status_code=HTTPStatus.OK, response_model=UserPublic)
+@user_router.patch("/{id}", status_code=HTTPStatus.OK, response_model=UserPublic)
 async def update_user(id: int, user: UserUpdate, controller: UserController = Depends(user_controller)):
     return await controller.update(id, data=user)
 
